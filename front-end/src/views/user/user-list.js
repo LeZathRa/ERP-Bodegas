@@ -252,7 +252,9 @@ const Dashboard = () => {
                       </CTableDataCell>
                       <CTableDataCell>
                         <div className="text-center">
+                          <Link to="/users/edit">
                             <CButton color="warning">Editar</CButton>
+                          </Link>
                         </div>
 
                       </CTableDataCell>
