@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 /* let */
 const userRoutes = require('./src/router/user.route');
+const categoryRoutes = require('./src/router/category.route');
 /* let */
 
 mongoose.connect('mongodb+srv://root:root@cluster0.dhsoi.mongodb.net/erp-bodega');
@@ -40,7 +41,8 @@ app.options("/*",function(req,res,next){
 });
 
 /* let */
-app.use('/user',userRoutes);
+app.use('/user', userRoutes);
+app.use('/category', categoryRoutes);
 
 /* let */
 
