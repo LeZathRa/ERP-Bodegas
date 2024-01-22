@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
+const jwt = require('jsonwebtoken');
 
 module.exports = {
 	show: (req, res, next) => {
@@ -182,4 +183,52 @@ module.exports = {
 			});
 		}
 	},
-};
+	login: async (req, res, next) => {
+		try{
+			const {email, password} = req.body;
+			const user = await User.findOne({email});
+
+			if (!user){
+				return res.status(400).json({
+					code: 3,
+					message:'Authentication failed',
+					data: null
+			});
+			}
+			const isPasswordValid = await bcrypt.compare (password, user.password);
+
+			if (!isPasswordValid){
+				return res.status(400).json({
+					code: 4,
+					message:'Authentication failed',
+					data: null
+				});
+			}
+			const token = jwt.sign(
+				{
+					email: user.email,
+					userId: user._id,
+				},
+				'secret',
+				{
+					expiresIn:"12h"
+				}
+			);
+			return res.status(200).json({
+				code:0,
+				message:'Authentication sucessful',
+				data: {token},
+				
+			});
+
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({
+			   code: 1,
+			   message: 'Internal server error',
+			   data: null
+			});
+		 }
+	  },
+   
+   };
