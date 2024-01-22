@@ -56,6 +56,7 @@ module.exports = {
 				password,
 				image,
 			} = req.body;
+			const { userId: userIdAuth } = req.userData
 			const userExisting = await User.findOne({ email });
 			if (userExisting) {
 				return res.status(400).json({
@@ -76,6 +77,8 @@ module.exports = {
 				cellphone,
 				role,
 				image,
+				createdBy: mongoose.Types.ObjectId(userIdAuth),
+				createdAt: new Date()
 			});
 			await user.save();
 			res.status(201).json({
@@ -96,6 +99,9 @@ module.exports = {
 		try {
 			const userId = req.body.userId;
 			const updateOps = req.body;
+			const { userId: userIdAuth } = req.userData
+			updateOps.updatedBy = mongoose.Types.ObjectId(userIdAuth);
+			updateOps.updatedAt = new Date();
 			delete updateOps.userId;
 			delete updateOps.password;
 

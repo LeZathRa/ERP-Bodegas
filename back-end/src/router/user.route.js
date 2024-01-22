@@ -8,5 +8,6 @@ router.post('/', CheckAuth, UserController.create);
 router.put('/', CheckAuth, UserController.update);
 router.delete('/:userId', CheckAuth,UserController.delete);
 router.get('/:userId', CheckAuth, UserController.findOne);
+router.post('/login', UserController.login);
 
 module.exports = router;
