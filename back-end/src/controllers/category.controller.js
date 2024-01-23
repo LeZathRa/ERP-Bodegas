@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Category = require("../models/category");
+const jwt = require('jsonwebtoken');
 
 module.exports = {
 	show: (req, res, next) => {
@@ -35,10 +36,12 @@ module.exports = {
 	},
 	create: async (req, res, next) => {
 		try {
+
 			const {
 				name,
                 image
 			} = req.body;
+			const { userId: userIdAuth } = req.userData
 			const categoryExisting = await Category.findOne({ name });
 			if (categoryExisting) {
 				return res.status(400).json({
@@ -51,6 +54,8 @@ module.exports = {
 				_id: new mongoose.Types.ObjectId(),
                 name,
                 image,
+				createdBy: mongoose.Types.ObjectId(userIdAuth),
+				createdAt: new Date()
 			});
 			await category.save();
 			res.status(201).json({
@@ -71,8 +76,12 @@ module.exports = {
 		try {
             const categoryId = req.body.categoryId;
             const updateOps = req.body;
-            delete updateOps.categoryId;
-
+			const {userId: userIdAuth } = req.UserData;
+			updateOps.updatedBy = mongoose.Types.ObjectId(userIdAuth);
+			updateOps.updatedAt= new Date();
+			delete updateOps.categoryId;
+			delete updateOps.createdBy;
+		
             const updatedCategory = await Category.findByIdAndUpdate(
                 { _id: categoryId },
                 { $set: updateOps },

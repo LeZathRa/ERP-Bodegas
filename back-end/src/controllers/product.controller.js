@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Product = require("../models/product");
+const jwt = require('jsonwebtoken');
 
 module.exports = {
 	show: (req, res, next) => {
@@ -44,6 +45,7 @@ module.exports = {
                 providerId,
                 categoryId
 			} = req.body;
+			const { userId: userIdAuth }= req.userData
 			const productExisting = await Product.findOne({ name });
 			if (productExisting) {
 				return res.status(400).json({
@@ -59,7 +61,9 @@ module.exports = {
                 stock,
                 price,
                 providerId,
-                categoryId
+                categoryId,
+				createdBy: mongoose.Types.ObjectId(),
+				createdAt: new Date()
 			});
 			await product.save();
             product.price = price.toString();
@@ -81,7 +85,12 @@ module.exports = {
 		try {
             const productId = req.body.productId;
             const updateOps = req.body;
+			const { userId: usertIdAuth } = req.productData;
+			updateOps.updateBy = mongoose.Types.ObjectId(userIdAuth);
+			updateOps.updateAt = new Date();
             delete updateOps.productId;
+            delete updateOps.createdBy;
+
 
             const updatedProduct = await Product.findByIdAndUpdate(
                 { _id: productId },

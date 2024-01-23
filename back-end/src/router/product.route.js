@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const ProductController = require('../controllers/product.controller');
+const CheckAuth = require('../middlewares/check-auth');
 
-router.get('/', ProductController.show);
-router.post('/', ProductController.create);
-router.put('/', ProductController.update);
-router.delete('/:productId',ProductController.delete);
-router.get('/:productId',ProductController.findOne);
+
+router.get('/', CheckAuth, ProductController.show);
+router.post('/', CheckAuth,  ProductController.create);
+router.put('/', CheckAuth,  ProductController.update);
+router.delete('/:productId', CheckAuth, ProductController.delete);
+router.get('/:productId', CheckAuth, ProductController.findOne);
 
 module.exports = router;
