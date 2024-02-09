@@ -12,6 +12,9 @@ const UserEdit = React.lazy(() => import('./views/user/user-edit'))
 //providers
 const ProviderList = React.lazy(() => import('./views/provider/provider-list'))
 
+//products
+const ProductCreate = React.lazy(() => import('./views/product/product-create'))
+
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
 const Breadcrumbs = React.lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'))
@@ -65,6 +68,7 @@ const routes = [
   { path: '/users/create', name: 'Crear Usuario', element: UserCreate },
   { path: '/users/edit', name: 'Editar Usuario', element: UserEdit },
   { path: '/providers', name: 'Provedores', element: ProviderList },
+  { path: '/products/create', name: 'Crear Producto', element: ProductCreate },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
