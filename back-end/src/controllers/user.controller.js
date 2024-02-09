@@ -99,7 +99,7 @@ module.exports = {
 		try {
 			const userId = req.body.userId;
 			const updateOps = req.body;
-			const { userId: userIdAuth } = req.userData
+			const { userId: userIdAuth } = req.userData;
 			updateOps.updatedBy = mongoose.Types.ObjectId(userIdAuth);
 			updateOps.updatedAt = new Date();
 			delete updateOps.userId;
